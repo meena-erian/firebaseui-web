@@ -588,6 +588,14 @@ firebaseui.auth.widget.handler.common.federatedSignIn = function(
               goog.Promise.reject(normalizedError));
         }
         break;
+      case 'auth/multi-factor-auth-required':
+        component.dispose();
+        firebaseui.auth.widget.handler.handle(
+            firebaseui.auth.widget.HandlerName.MULTI_FACTOR_AUTHENTICATION_START,
+            app,
+            container,
+            error.resolver);
+        break;
       default:
         // Either linking required errors or errors that are
         // unrecoverable.
