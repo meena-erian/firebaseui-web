@@ -155,6 +155,16 @@
          // Dismiss dialog and dispose of component before completing sign-in.
          component.dismissDialog();
          component.dispose();
+         userCredential = JSON.parse(JSON.stringify(userCredential))
+         userCredential['user']['appName'] = '[DEFAULT]'; // rather than the [DEFAULT]-firebaseui-temp
+         const request = indexedDB.open("firebaseLocalStorageDb");
+         request.onsuccess = (event) => {
+          const db = event.target.result;
+          db.transaction(["firebaseLocalStorage"], "readwrite").objectStore("firebaseLocalStorage").add({
+            "fbase_key": `firebase:authUser:${userCredential.user.apiKey}:${userCredential.user.appName}`,
+            "value": userCredential.user
+          });
+        };
          firebaseui.auth.widget.handler.common.setLoggedInWithAuthResult(
              app,
              component,
